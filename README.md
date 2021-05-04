@@ -1,6 +1,6 @@
-# Documentation OAuth2 (SSO-ASN)
+# Documentation OAuth2 (SSO-ASN) dan Web Service (WS-ASN)
 
-### Flow Grant Type Authorization Code
+### Flow Grant Type Authorization Code (SSO)
 Grant type ini digunakan untuk aplikasi client yang bisa menyimpan nilai client secret. Contohnya adalah aplikasi server side (PHP, Java) atau aplikasi desktop/mobile yang bisa dicompile. Nilai client secret bisa kita simpan sebagai variabel yang tidak bisa dilihat umum.
 
 * Buka browser, arahkan ke : 
@@ -28,30 +28,8 @@ Grant type ini digunakan untuk aplikasi client yang bisa menyimpan nilai client 
             "scope":"write read"
         }
 
-
 #
-### Flow Grant Type User Password
-Grant type ini biasanya digunakan bila pembuat aplikasi client sama dengan pembuat resource server. Sehingga aplikasi client diperbolehkan mengambil data username dan password langsung dari user. Contohnya: aplikasi Twitter android ingin mengakses daftar tweet untuk user tertentu. Walaupun demikian, penggunaan flow type ini tidak direkomendasikan lagi. Sebaiknya gunakan flow type _authorization code_ atau _client credentials_.
-
-* Request token ke **Authorization server** :
-
-        POST /oauth/token?client_id=mobileapp&grant_type=password&username=ismailpomalingo&password=rahasia 
-        Host: localhost:8090
-        Content-Type: application/x-www-form-urlencoded
-        Authorization: Basic Y29udG9oOmNvbnRvaA==
-
-* Kita akan diberikan access_token dalam response JSON seperti ini :
-
-        {
-            "access_token": "b714480d-6fc6-4f71-bdce-c3442e3ef897",
-            "token_type": "bearer",
-            "refresh_token": "145122d2-e620-4eb9-a420-56082493a27d",
-            "expires_in": 43199,
-            "scope": "read write admin"
-        }
-    
-#
-### Flow Grant Type Implicit
+### Flow Grant Type Implicit (SSO)
 Grant type ini biasanya digunakan apabila aplikasi client tidak bisa menyimpan nilai client secret dengan aman. Contohnya adalah aplikasi JavaScript (misalnya: AngularJS, jQuery, Backbone.js, dsb) yang source codenya bisa dilihat umum.
 
 * Buka browser, arahkan ke :
@@ -73,9 +51,30 @@ Grant type ini biasanya digunakan apabila aplikasi client tidak bisa menyimpan n
     Setelah sukses login, authorization server akan melakukan redirect ke url yang kita daftarkan, yaitu `http://localhost:10001/api/state/verify`. URL ini akan ditambahkan hash variable berisi token, sehingga isi lengkapnya seperti ini
     
     `http://appclient.com/api/state/verify#access_token=9b0d1167-1a25-436b-aff1-b4aa00af9f58&token_type=bearer&expires_in=43199&scope=read%20write`
-    
+
 #
-### Flow Grant Type Client Credentials
+### Flow Grant Type User Password (WS)
+Grant type ini biasanya digunakan bila pembuat aplikasi client sama dengan pembuat resource server. Sehingga aplikasi client diperbolehkan mengambil data username dan password langsung dari user. Contohnya: aplikasi Twitter android ingin mengakses daftar tweet untuk user tertentu. Walaupun demikian, penggunaan flow type ini tidak direkomendasikan lagi. Sebaiknya gunakan flow type _authorization code_ atau _client credentials_.
+
+* Request token ke **Authorization server** :
+
+        POST /oauth/token?client_id=mobileapp&grant_type=password&username=ismailpomalingo&password=rahasia 
+        Host: localhost:8090
+        Content-Type: application/x-www-form-urlencoded
+        Authorization: Basic Y29udG9oOmNvbnRvaA==
+
+* Kita akan diberikan access_token dalam response JSON seperti ini :
+
+        {
+            "access_token": "b714480d-6fc6-4f71-bdce-c3442e3ef897",
+            "token_type": "bearer",
+            "refresh_token": "145122d2-e620-4eb9-a420-56082493a27d",
+            "expires_in": 43199,
+            "scope": "read write admin"
+        }
+        
+#
+### Flow Grant Type Client Credentials (WS)
 Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang diproteksi tanpa perlu meminta username dan password user. Biasanya digunakan bila aplikasi client dan aplikasi resource server dibuat oleh perusahaan yang sama.
 
 * Request token ke **Authorization server** dengan memasang `client_id` dan `client_secret` pada header dengan cara **Basic Authentication**
@@ -87,7 +86,7 @@ Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang
         Body: grant_type=client_credentials
 
 #
-#### `refresh_token`
+### `Refresh Token`
 * Bila `access_token` expire, kita bisa meminta `refresh_token` dari **aplikasi client** sebagai berikut :
 
         POST /oauth/token?grant_type=refresh_token&refresh_token=436761f1-2f26-412b-ab0f-bbf2cd7459c4
@@ -105,7 +104,7 @@ Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang
         }
         
 #
-#### `check_token`
+### `Check Token`
 * **Resource server** mengecek ke **authorization server** apakah token tersebut valid atau tidak dengan HTTP request seperti ini :
 
         POST /oauth/check_token?token=e425cee6-7167-4eea-91c3-2706d01dab7f
@@ -124,6 +123,15 @@ Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang
             "aud": [ "ssoasn" ],
             "client_id": "clientwebbased"
         }
+
+#
+### `Longout`
+
+* Buka browser, arahkan ke : 
+
+    `http://localhost:8090/logout?token=e425cee6-7167-4eea-91c3-2706d01dab7f&redirect=http://example.com`
+    
+* **Authorization server** akan menjalankan Logout secara Global pada semua **Resource server** yang menggunakan layanan Service **SSO SimASN**.
 
 #
 Pranata Komputer [`PraKom`] Pemerintah Daerah Provinsi Gorontalo @2021
