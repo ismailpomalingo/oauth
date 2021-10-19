@@ -129,7 +129,7 @@ Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang
 
 * Buka browser, arahkan ke : 
 
-    `http://localhost:8090/logout?token=e425cee6-7167-4eea-91c3-2706d01dab7f&redirect=http://example.com`
+    `http://localhost:8090/oauth/logout?token=e425cee6-7167-4eea-91c3-2706d01dab7f&redirect=http://example.com`
     
 * **Authorization server** akan menjalankan Logout secara Global pada semua **Resource server** yang menggunakan layanan Service **SSO SimASN**.
 
