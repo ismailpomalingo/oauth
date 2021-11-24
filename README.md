@@ -5,7 +5,7 @@ Grant type ini digunakan untuk aplikasi client yang bisa menyimpan nilai client 
 
 * Buka browser, arahkan ke : 
 
-  `http://localhost:8090/oauth/authorize?client_id=clientwebbased&response_type=code&redirect_uri=http://example.com`
+  `https://accounts.gorontaloprov.go.id/oauth/authorize?client_id=example&response_type=code`
 
 * Kita akan diredirect ke url yang kita sebutkan pada variabel `redirect_uri` di langkah pertama di atas dengan ditambahi parameter authorization `code`. URL hasil redirectnya seperti ini:
   
@@ -13,8 +13,8 @@ Grant type ini digunakan untuk aplikasi client yang bisa menyimpan nilai client 
   
 * Lakukan request dari **aplikasi client** untuk menukar authorization `code` dengan `access_token` :
     
-        POST: /oauth/token?grant_type=authorization_code&code=COntoH&redirect_uri=http://example.com
-        Host: localhost:8090
+        POST: /oauth/token?grant_type=authorization_code&code=COntoH
+        Host: https://accounts.gorontaloprov.go.id
         Content-Type: application/x-www-form-urlencoded
         Authorization: Basic Y29udG9oOmNvbnRvaA==
 
@@ -34,7 +34,7 @@ Grant type ini biasanya digunakan apabila aplikasi client tidak bisa menyimpan n
 
 * Buka browser, arahkan ke :
 
-    `http://localhost:8090/oauth/authorize?client_id=clientspamobile&response_type=token`
+    `https://accounts.gorontaloprov.go.id/oauth/authorize?client_id=example&response_type=token`
     
 * Kita akan diredirect ke url yang kita daftarkan pada **Resource server**. URL hasil redirectnya seperti ini:
 
@@ -42,15 +42,15 @@ Grant type ini biasanya digunakan apabila aplikasi client tidak bisa menyimpan n
   
 * Untuk Keamanan, sebaiknya kita menambahkan nilai variabel `state` pada **_aplikasi client_**. Nilai variabel `state` ini disimpan sebagai session variable di sisi **_server aplikasi client_**. Kita akan gunakan nilai variabel `state` ini untuk verifikasi pada langkah selanjutnya. Contoh:
 
-    `http://appclient.com/api/state/xyz123`
+    `http://example.com/api/state/xyz123`
     
     Setelah dapat variabel `state` dari request di atas, gunakan untuk generate token
     
-    `http://localhost:8090/oauth/authorize?client_id=clientspamobile&response_type=token&state=xyz123`
+    `https://accounts.gorontaloprov.go.id/oauth/authorize?client_id=example&response_type=token&state=xyz123`
     
     Setelah sukses login, authorization server akan melakukan redirect ke url yang kita daftarkan, yaitu `http://localhost:10001/api/state/verify`. URL ini akan ditambahkan hash variable berisi token, sehingga isi lengkapnya seperti ini
     
-    `http://appclient.com/api/state/verify#access_token=9b0d1167-1a25-436b-aff1-b4aa00af9f58&token_type=bearer&expires_in=43199&scope=read%20write`
+    `http://example.com/api/state/verify#access_token=9b0d1167-1a25-436b-aff1-b4aa00af9f58&token_type=bearer&expires_in=43199&scope=read%20write`
 
 #
 ### Flow Grant Type User Password (WS)
@@ -59,7 +59,7 @@ Grant type ini biasanya digunakan bila pembuat aplikasi client sama dengan pembu
 * Request token ke **Authorization server** :
 
         POST /oauth/token?client_id=mobileapp&grant_type=password&username=ismailpomalingo&password=rahasia 
-        Host: localhost:8090
+        Host: https://accounts.gorontaloprov.go.id
         Content-Type: application/x-www-form-urlencoded
         Authorization: Basic Y29udG9oOmNvbnRvaA==
 
@@ -80,7 +80,7 @@ Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang
 * Request token ke **Authorization server** dengan memasang `client_id` dan `client_secret` pada header dengan cara **Basic Authentication**
 
         POST /oauth/token
-        Host: localhost:8090
+        Host: https://accounts.gorontaloprov.go.id
         Content-Type: application/x-www-form-urlencoded
         Authorization: Basic Y29udG9oOmNvbnRvaA==
         Body: grant_type=client_credentials
@@ -90,7 +90,7 @@ Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang
 * Bila `access_token` expire, kita bisa meminta `refresh_token` dari **aplikasi client** sebagai berikut :
 
         POST /oauth/token?grant_type=refresh_token&refresh_token=436761f1-2f26-412b-ab0f-bbf2cd7459c4
-        Host: localhost:8090
+        Host: https://accounts.gorontaloprov.go.id
         Content-Type: application/x-www-form-urlencoded
         Authorization: Basic Y29udG9oOmNvbnRvaA==
 
@@ -108,7 +108,7 @@ Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang
 * **Resource server** mengecek ke **authorization server** apakah token tersebut valid atau tidak dengan HTTP request seperti ini :
 
         POST /oauth/check_token?token=e425cee6-7167-4eea-91c3-2706d01dab7f
-        Host: localhost:8090
+        Host: https://accounts.gorontaloprov.go.id
         Content-Type: application/x-www-form-urlencoded
         Authorization: Basic Y29udG9oOmNvbnRvaA==
 
@@ -129,7 +129,7 @@ Pada flow type ini, aplikasi client diberikan akses penuh terhadap resource yang
 
 * Buka browser, arahkan ke : 
 
-    `http://localhost:8090/oauth/logout?token=e425cee6-7167-4eea-91c3-2706d01dab7f&redirect=http://example.com`
+    `https://accounts.gorontaloprov.go.id/oauth/logout?token=e425cee6-7167-4eea-91c3-2706d01dab7f&redirect=http://example.com`
     
 * **Authorization server** akan menjalankan Logout secara Global pada semua **Resource server** yang menggunakan layanan Service **SSO SimASN**.
 
